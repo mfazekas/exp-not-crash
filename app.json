@@ -13,7 +13,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.mikloszabit.exp-not-crash"
     },
     "android": {
       "adaptiveIcon": {
@@ -31,6 +32,12 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "27bce668-8f81-478c-b965-f130f1f43e4c"
+      }
+    },
+    "owner": "mikloszabit"
   }
 }

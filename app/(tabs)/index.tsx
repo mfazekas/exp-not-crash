@@ -1,9 +1,58 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Platform, View, TextInput, ScrollView, Button } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { useState } from 'react';
+
+import * as Notifications from 'expo-notifications';
+
+import {
+  reloadAsync,
+} from 'expo-updates'
+
+function BusyComponent({n,d}: {n:number, d:number}) {
+  const items = Array.from(Array(n).keys())
+  //console.log("Items", items)
+  return (
+    <View style={{backgroundColor:'blue', minHeight: 20, minWidth: 20, flexDirection: 'row', flexWrap: 'wrap'}}>
+    <View style={{width:3*5, height: 3*5, backgroundColor: 'red', borderRadius: 2}} key={`item1111`} />
+    {items.map((i) => (
+      <View style={{width:(i*5+d)/10.0, height: (i*5+d)/10.0, backgroundColor: 'red', borderRadius: i-1}} key={`item${i*d}`} >
+      {((i % 4) == 0) && <TextInput value={String(n*d*`pp:${i*7+d*19}`)}/>}
+      </View>
+    ))}
+    </View>
+  )
+}
+
+function AnimatedStuff() {
+  const [actD, setActD] = useState(0)
+  console.log("render")
+  requestAnimationFrame(() => {
+    setActD((actD+1)%100)
+  })
+  return (<BusyComponent n={21+10*(actD%7)} d={actD} />)
+}
+
+function NotificationWhileReloadTesterComponent() {
+  return (
+    <>
+    <Button title="Ask for notify & reload" onPress={async () => {
+    console.log("=> bef req perm")
+    setTimeout(() => {
+      console.log("before reload")
+      reloadAsync()
+      console.log("reload issued")
+    },2000)
+    const ret = await Notifications.requestPermissionsAsync()
+    console.log("=> after req perm", ret)
+    console.log("after req perm", ret)
+    }} />
+    </>
+  )
+}
 
 export default function HomeScreen() {
   return (
@@ -20,7 +69,8 @@ export default function HomeScreen() {
         <HelloWave />
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
+        <ThemedText type="subtitle">Step 1234: Try it</ThemedText>
+        <NotificationWhileReloadTesterComponent />
         <ThemedText>
           Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
           Press{' '}
